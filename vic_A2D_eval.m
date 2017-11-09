@@ -3,9 +3,10 @@ function vic_A2D_eval(learning_case_wanted)
 % function that computes the mAP for the multitask, hierarchical and
 % cartesian combinations
 
-if (nargin<1), learning_case_wanted = 2; end
+if (nargin<1), learning_case_wanted = 1; end
 if(~isdeployed), dbstop if error; end
 
+addpath([pwd '/utils/'])
 % paths.test_detections: the path where the detections are stored 
 paths.test_detections = [pwd '/'];
 
@@ -16,7 +17,7 @@ options.learning_case = allcases{learning_case_wanted};
 options = vic_options_A2D(options);
 
 % Ground truth annotations for the A2D dataset
-load('gt_test_A2D.mat','gt_test')
+load([pwd '/src/gt_test_A2D.mat'],'gt_test')
 
 % Detections
 
