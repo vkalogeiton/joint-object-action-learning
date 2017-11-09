@@ -29,3 +29,9 @@ To run the mAP evaluation function for the multitask, hierarchical and cartesian
 To run the mAP evaluation function for the zero shot learning (Table 5 in our [paper](https://hal.inria.fr/hal-01575804/document)), run: 
 
     vic_A2D_eval_zeroshot 
+    
+## Object-action semantic segmentation
+
+To run the semantic segmentation evaluation function (Table 6 in our [paper](https://hal.inria.fr/hal-01575804/document)), run: 
+
+    vic_eval_segmentation 
