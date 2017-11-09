@@ -7,9 +7,9 @@ By Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
 In our [ICCV17](https://hal.inria.fr/hal-01575804/document) paper we jointly detect objects performing various avtions in videos. 
 Here, we provide the evaluation code used in our experiments. 
 
-## Citing ACT-detector
+## Citing Joint learning of object and action detectors
 
-If you find ACT-detector useful in your research, please cite: 
+If you find our evaluation code useful in your research, please cite: 
 
     @inproceedings{kalogeiton17biccv,
       TITLE = {Joint learning of object and action detectors},
