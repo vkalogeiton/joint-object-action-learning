@@ -1,8 +1,20 @@
 function vic_A2D_eval_zeroshot()
 
-% function that computes the mAP for the zero-shot learning
+% -------------------------------------------------------------------------
+% Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
+% email: vicky.kalogeiton@gmail.com
+
+% If you use this software please cite our ICCV 2017 paper: 
+% Joint learning of object and action detectors
+% Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
+% In ICCV 2017
+
+% -------------------------------------------------------------------------
+% Function that computes the mAP for the zero-shot learning
 % At training time we remove all actions of each object class and predict them 
 % at test time
+% -------------------------------------------------------------------------
+
 if(~isdeployed), dbstop if error; end
 
 % paths.test_detections: the path where the detections are stored 

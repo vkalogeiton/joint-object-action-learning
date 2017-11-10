@@ -1,5 +1,14 @@
 function [det_obj_act_boxes] = vic_compute_multitaskBoxes(GT_List, paths, options)
 
+% -------------------------------------------------------------------------
+% Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
+% email: vicky.kalogeiton@gmail.com
+
+% If you use this software please cite our ICCV 2017 paper: 
+% Joint learning of object and action detectors
+% Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
+% In ICCV 2017
+
 %--------------------------------------------------------------------------
 % toy function that shows how to compute the detection boxes 
 % for the multitask case 

@@ -1,23 +1,21 @@
 function options = vic_options_A2D(options)
 
+% -------------------------------------------------------------------------
+% Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
+% email: vicky.kalogeiton@gmail.com
+
+% If you use this software please cite our ICCV 2017 paper: 
+% Joint learning of object and action detectors
+% Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
+% In ICCV 2017
+
+% -------------------------------------------------------------------------
 % A2D has c_obj = 7 object classes and c_act = 9 action classes
 % In total there are C = 7x9 = 63 combinations
 % out of which (valid_pairs) V = 43 are valid (for instance there is no car
 % eating)
+% -------------------------------------------------------------------------        
 
-% options.objects = {'adult', 'baby', 'ball', 'bird', 'car' , 'cat', 'dog'};
-% options.actions = {'none','climbing', 'crawling', 'eating', 'flying', 'jumping', 'rolling', 'running', 'walking'};
-% options.c_obj = length(options.objects); % number of object classes 
-% options.c_act = length(options.actions); % number of action classes 
-
-% options.actions_given_objects2{1,1} = {'none', 'climbing', 'crawling', 'eating', 'jumping',  'rolling', 'running', 'walking'};
-% options.actions_given_objects2{2,1} = {'none', 'climbing', 'crawling', 'rolling', 'walking'};
-% options.actions_given_objects2{3,1} = {'none', 'flying',   'jumping',  'rolling'};
-% options.actions_given_objects2{4,1} = {'none', 'climbing', 'eating',   'flying',  'jumping', 'rolling', 'walking'};
-% options.actions_given_objects2{5,1} = {'none', 'flying',   'jumping',  'rolling', 'running'};
-% options.actions_given_objects2{6,1} = {'none', 'climbing', 'eating',   'jumping', 'rolling', 'running', 'walking'};
-% options.actions_given_objects2{7,1} = {'none', 'crawling', 'eating',   'jumping', 'rolling', 'running', 'walking'};  
-        
 options.valid_pairs= {'adult_none', 'adult_climbing', 'adult_crawling', ...
     'adult_eating', 'adult_jumping', 'adult_rolling', 'adult_running', 'adult_walking', ...
     'baby_none', 'baby_climbing', 'baby_crawling', 'baby_rolling', 'baby_walking', ...

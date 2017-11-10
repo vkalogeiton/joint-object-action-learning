@@ -1,7 +1,18 @@
 function vic_A2D_eval(learning_case_wanted)
 
+% -------------------------------------------------------------------------
+% Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
+% email: vicky.kalogeiton@gmail.com
+
+% If you use this software please cite our ICCV 2017 paper: 
+% Joint learning of object and action detectors
+% Vicky Kalogeiton, Philippe Weinzaepfel, Vittorio Ferrari, Cordelia Schmid
+% In ICCV 2017
+
+% -------------------------------------------------------------------------
 % function that computes the mAP for the multitask, hierarchical and
 % cartesian combinations
+% -------------------------------------------------------------------------
 
 if (nargin<1), learning_case_wanted = 1; end
 if(~isdeployed), dbstop if error; end
