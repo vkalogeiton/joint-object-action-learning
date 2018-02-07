@@ -29,7 +29,7 @@ end
 %--------------------------------------------------------------------------
 % Output
 %--------------------------------------------------------------------------
-% det_obj_act_boxes: multitask detections: cell array (NxV), where V is the number
+% det_obj_act_boxes: multitask detections: cell array (VxN), where V is the number
 % of valid object-action and N is the number of frames
 % Each cell is a (Kx5) single matrix, where K is the number of detections
 % of the class C for the frame N, and 5 are [bbox coordinates, score]: [x1, y1, x2, y2, score]
@@ -55,7 +55,7 @@ for ii=1:n_frames
         bboxes(:, 5) = det.score(:, cls+1);
         bboxes = single(bboxes); 
         [~, ind] = sort(bboxes(:, 5),'descend');
-        det_obj_act_boxes{ii, cls} = bboxes(ind, :);   
+        det_obj_act_boxes{cls, ii} = bboxes(ind, :);   
     end    
 end   
 
