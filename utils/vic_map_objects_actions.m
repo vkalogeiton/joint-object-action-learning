@@ -18,8 +18,8 @@ if(~isdeployed)
     dbstop if error
 end
        
-AllLabels = cell(size(det_boxes,1),1);
-AllScores = cell(size(det_boxes,1),1);
+AllLabels = cell(size(det_boxes,2),1);
+AllScores = cell(size(det_boxes,2),1);
 
 % for all frames
 for k=1:size(det_boxes,2)
