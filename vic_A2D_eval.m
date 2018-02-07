@@ -14,12 +14,12 @@ function vic_A2D_eval(learning_case_wanted)
 % cartesian combinations
 % -------------------------------------------------------------------------
 
-if (nargin<1), learning_case_wanted = 1; end
+if (nargin<1), learning_case_wanted = 2; end
 if(~isdeployed), dbstop if error; end
 
 addpath([pwd '/utils/'])
 % paths.test_detections: the path where the detections are stored 
-paths.test_detections = [pwd '/'];
+paths.test_detections = [pwd '/detections/'];
 
 allcases = {'multitask', 'hierarchical', 'cartesian'};
 options.learning_case = allcases{learning_case_wanted}; 
@@ -33,9 +33,9 @@ load([pwd '/src/gt_test_A2D.mat'],'gt_test')
 % Detections
 
 % Load detections for all boxes in the following format: cell array 
-% (multitask): (NxC), where C is the number of object-action classes
-% (cartesian): (NxV), where V is the number of valid object-action pairs
-% (hierarchical): (NxV), where V is the number of valid object-action pairs
+% (multitask): (CxN), where C is the number of object-action classes
+% (cartesian): (VxN), where V is the number of valid object-action pairs
+% (hierarchical): (VxN), where V is the number of valid object-action pairs
 % and N is the number of frames
 % Each cell is a (Kx5) single matrix, where K is the number of detections
 % of the class C for the frame N, and 5 are [bbox coordinates, score]: [x1, y1, x2, y2, score]
@@ -66,6 +66,7 @@ switch options.learning_case
                 if options.AllCombinations(C, 4) ~=0
                     V = V + 1; 
                     classname = [options.objects{cls_obj} '_' options.actions{cls_act}];
+                    keyboard;
                     [res] = vic_map_objects_actions(gt_test, C, det_boxes, V);
                     printAP = res.ap * 100;
                     disp(['AP for ' classname ' is ' num2str(printAP) '%'])
