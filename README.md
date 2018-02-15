@@ -20,6 +20,10 @@ If you find our evaluation code useful in your research, please cite:
 
 ## Evalutation of all architectures
 
+You can download our detection results (multitask, hierarchical and cartesian):
+    
+    curl http://pascal.inrialpes.fr/data2/joint-objects-actions/JointLearningDetections.tar.gz | tar xz 
+    
 To run the mAP evaluation function for the multitask, hierarchical and cartesian cases (Table 4 in our [paper](https://hal.inria.fr/hal-01575804/document)), run: 
 
     vic_A2D_eval(learning_case) # learning_case: 1, 2 or 3 for multitask, hierarchical and cartesian, respectively
