@@ -46,6 +46,10 @@ for ii = 1:length(options.valid_pairs)
     end    
 end
 
+objects= [objects{1}; sort(objects(2:end,:))];
+actions= [actions{1}; sort(actions(2:end,:))];
+
+
 AllCombinations = zeros(length(objects)*length(actions),4); 
 % The first column has the object id 
 % The second column has the action id 
@@ -69,6 +73,7 @@ end
 options.AllCombinations = AllCombinations; 
 options.objects = objects;
 options.actions = actions;
+options.actions = [options.actions{1} ;sort(options.actions(2:end,:))]
 options.c_obj = length(options.objects); % number of object classes 
 options.c_act = length(options.actions); % number of action classes 
 

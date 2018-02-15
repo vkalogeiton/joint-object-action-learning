@@ -14,13 +14,12 @@ function vic_A2D_eval(learning_case_wanted)
 % cartesian combinations
 % -------------------------------------------------------------------------
 
-if (nargin<1), learning_case_wanted = 2; end
+if (nargin<1), learning_case_wanted = 1; end
 if(~isdeployed), dbstop if error; end
 
 addpath([pwd '/utils/'])
 % paths.test_detections: the path where the detections are stored 
 paths.test_detections = [pwd '/detections/'];
-
 allcases = {'multitask', 'hierarchical', 'cartesian'};
 options.learning_case = allcases{learning_case_wanted}; 
 
@@ -56,7 +55,7 @@ switch options.learning_case
                 [res] = vic_map_objects_actions(gt_test, C, det_boxes, V);
                 printAP = res.ap * 100;
                 disp(['AP for ' classname ' is ' num2str(printAP) '%'])
-                FinalAP(cls_act, cls_obj) = printAP;
+                FinalAP(cls_obj, cls_act) = printAP;
             end
         end
     case {'cartesian','hierarchical'}
@@ -66,18 +65,17 @@ switch options.learning_case
                 if options.AllCombinations(C, 4) ~=0
                     V = V + 1; 
                     classname = [options.objects{cls_obj} '_' options.actions{cls_act}];
-                    keyboard;
                     [res] = vic_map_objects_actions(gt_test, C, det_boxes, V);
                     printAP = res.ap * 100;
                     disp(['AP for ' classname ' is ' num2str(printAP) '%'])
-                    FinalAP(cls_act, cls_obj) = printAP;
+                    FinalAP(cls_obj, cls_act) = printAP;
                 end
             end
         end
 end
 % we measure AP over the classes that exist in the train/test sets
 mAP = sum(FinalAP(find(FinalAP>0)))/options.num_valid; 
-
+disp(['mAP for ' options.learning_case ' is ' num2str(mAP) '%'])
 
 end
 

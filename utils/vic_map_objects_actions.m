@@ -29,8 +29,11 @@ for k=1:size(det_boxes,2)
    currBoxes = currBoxes(pick,:);
    idxCLSgt = find(~cellfun(@isempty,gt_test.boxes(k,:)));
    currentGT = [];
-   if (idxCLSgt == cls), currentGT = gt_test.boxes{k, idxCLSgt}; end 
-
+   if ~isempty(find(idxCLSgt == cls))
+      currentGT = gt_test.boxes{k, idxCLSgt(find(idxCLSgt == cls))};
+   end
+   %if (idxCLSgt == cls), currentGT = gt_test.boxes{k, idxCLSgt}; end 
+   %keyboard;
    if isempty(currentGT)
       ov = -1*ones(size(currBoxes,1),1);
    else
