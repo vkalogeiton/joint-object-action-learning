@@ -19,7 +19,7 @@ if(~isdeployed), dbstop if error; end
 
 addpath([pwd '/utils/'])
 % paths.test_detections: the path where the detections are stored 
-paths.test_detections = [pwd '/detections/'];
+paths.test_detections = ['pwd' '/detections/'];
 allcases = {'multitask', 'hierarchical', 'cartesian'};
 options.learning_case = allcases{learning_case_wanted}; 
 
@@ -39,14 +39,19 @@ load([pwd '/src/gt_test_A2D.mat'],'gt_test')
 % Each cell is a (Kx5) single matrix, where K is the number of detections
 % of the class C for the frame N, and 5 are [bbox coordinates, score]: [x1, y1, x2, y2, score]
 % In A2D: (C = c_obj x c_act = 7 x 9) C = 63, V = 43 and N = 2365
-ComputeBoxesFunction = str2func(['vic_compute_' options.learning_case 'Boxes']);
-[det_boxes] = ComputeBoxesFunction(gt_test.images, paths, options);  
 
+ComputeBoxesFunction = str2func(['vic_compute_' options.learning_case 'Boxes']);
+[det_obj_boxes, det_act_boxes, det_obj_act_boxes] = ComputeBoxesFunction(gt_test.images, paths, options);  
+        
 FinalAP = zeros(options.c_obj, options.c_act);
+FinalAP_O  = zeros(options.c_obj, 1);
+FinalAP_A  = zeros(options.c_act, 1);
 C = 0;
 V = 0; 
+
 switch options.learning_case
     case 'multitask'
+        % object-action pairs
         for cls_obj = 1:options.c_obj
             for cls_act = 1:options.c_act
                 C = C + 1;
@@ -58,7 +63,24 @@ switch options.learning_case
                 FinalAP(cls_obj, cls_act) = printAP;
             end
         end
+        % only objects 
+        for cls_obj = 1:options.c_obj
+            classname = options.objects{cls_obj}; 
+            [res_obj] = vic_map(gt_test, cls_obj, det_obj_boxes, options, true); 
+            printAP = res_obj.ap * 100;
+            disp(['AP for ' classname ' is ' num2str(printAP) '%'])
+            FinalAP_O(cls_obj) = printAP;
+        end
+        % only actions
+        for cls_act = 1:options.c_act
+            classname = options.actions{cls_act}; 
+            [res_act] = vic_map(gt_test, cls_act, det_act_boxes, options, false); 
+            printAP = res_act.ap * 100;
+            disp(['AP for ' classname ' is ' num2str(printAP) '%'])
+            FinalAP_A(cls_act) = printAP;
+        end
     case {'cartesian','hierarchical'}
+        % object-action pairs
         for cls_obj = 1:options.c_obj
             for cls_act = 1:options.c_act
                 C = C + 1;
@@ -72,10 +94,34 @@ switch options.learning_case
                 end
             end
         end
+        % only objects 
+        for cls_obj = 1:options.c_obj
+            classname = options.objects{cls_obj}; 
+            [res_obj] = vic_map(gt_test, cls_obj, det_obj_boxes, options, true); 
+            printAP = res_obj.ap * 100;
+            disp(['AP for ' classname ' is ' num2str(printAP) '%'])
+            keyboard;
+            FinalAP_O(cls_obj) = printAP;
+        end
+        % only actions
+        for cls_act = 1:options.c_act
+            classname = options.actions{cls_act}; 
+            [res_act] = vic_map(gt_test, cls_act, det_act_boxes, options, false); 
+            printAP = res_act.ap * 100;
+            disp(['AP for ' classname ' is ' num2str(printAP) '%'])
+            FinalAP_A(cls_act) = printAP;
+        end
 end
+
 % we measure AP over the classes that exist in the train/test sets
 mAP = sum(FinalAP(find(FinalAP>0)))/options.num_valid; 
-disp(['mAP for ' options.learning_case ' is ' num2str(mAP) '%'])
+disp(['mAP for ' options.learning_case 'on object-action pairs is ' num2str(mAP) '%'])
 
+mAP_O = sum(FinalAP_O)/options.c_obj; 
+disp(['mAP for ' options.learning_case 'on objects is ' num2str(mAP_O) '%'])
+
+% 'none' class is also background/negative for actions, so when evaluating only actions we don't consider it
+mAP_A = sum(FinalAP_A(2:end))/(options.c_act-1); 
+disp(['mAP for ' options.learning_case 'on actions is ' num2str(mAP_A) '%'])
 end
 

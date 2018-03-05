@@ -73,7 +73,7 @@ end
 options.AllCombinations = AllCombinations; 
 options.objects = objects;
 options.actions = actions;
-options.actions = [options.actions{1} ;sort(options.actions(2:end,:))]
+options.actions = [options.actions{1} ; sort(options.actions(2:end,:))];
 options.c_obj = length(options.objects); % number of object classes 
 options.c_act = length(options.actions); % number of action classes 
 
@@ -82,7 +82,11 @@ for cls_obj = 1:options.c_obj
     idx_act = find(AllCombinations(:,1) == cls_obj & AllCombinations(:,3) == 1);
     options.actions_given_objects{cls_obj,1} = actions(AllCombinations(idx_act(:),2));
 end
-
+% find objects given actions
+for cls_act = 1:options.c_act
+    idx_obj = find(options.AllCombinations(:,2) == cls_act & options.AllCombinations(:,3) == 1);
+    options.objects_given_actions{cls_act,1} = options.objects(options.AllCombinations(idx_obj(:),1));
+end
 
 
 end

@@ -1,9 +1,9 @@
-function [res] = vic_map_objects_actions(gt_test, cls, det_boxes, cls_V)
+function [res] = vic_map(gt_test, cls_X, det_boxes, options, objects)
 
 %--------------------------------------------------------------------------
-% det_boxes: multitask detections: cell array (CxN), where C is the number
-% of object-action classes and N is the number of frames
-% In A2D: (C = c_obj x c_act = 7 x 9) C = 63 and N = 2365
+% det_boxes: multitask detections: cell array (XxN), where X is the number
+% of object or action classes and N is the number of frames
+% In A2D: X: c_obj = 7 or X: c_act = 9, and N = 2365
 % Each cell is a (Kx5) single matrix, where K is the number of detections
 % of the class C for the frame N, and 5 are [bbox coordinates, score]: [x1, y1, x2, y2, score]
 
@@ -21,23 +21,33 @@ end
 AllLabels = cell(size(det_boxes,2),1);
 AllScores = cell(size(det_boxes,2),1);
 
+% objects
+if (nargin<5), objects = true; end
+
+if objects
+  idx_gt = find(options.AllCombinations(:, 1) == cls_X); 
+else % actions
+  idx_gt = find(options.AllCombinations(:, 2) == cls_X); 
+end
+
 % for all frames
 for k=1:size(det_boxes,2)
    disp([num2str(k) '/' num2str(size(det_boxes,2))])
-   currBoxes = det_boxes{cls_V,k};
+   currBoxes = det_boxes{cls_X,k};
    pick = nms(currBoxes, 0.3);
    currBoxes = currBoxes(pick,:);
-   idxCLSgt = find(~cellfun(@isempty,gt_test.boxes(k,:)));
+   idxCLSgt = find(~cellfun(@isempty, gt_test.boxes(k,:)));
    currentGT = [];
-   if ~isempty(find(idxCLSgt == cls))
-      currentGT = gt_test.boxes{k, idxCLSgt(find(idxCLSgt == cls))};
+   for icls = 1:length(idxCLSgt)
+    if ~isempty(find(idx_gt == idxCLSgt(icls)))
+      currentGT = cat(1,currentGT, gt_test.boxes{k, idxCLSgt(icls)}); 
+    end
    end
-   %if (idxCLSgt == cls), currentGT = gt_test.boxes{k, idxCLSgt}; end 
    %keyboard;
    if isempty(currentGT)
       ov = -1*ones(size(currBoxes,1),1);
    else
-      ov = computeOverlapTableDouble(double(currBoxes(:,1:4)), currentGT);
+      ov = computeOverlapTableDouble(double(currBoxes(:, 1:4)), currentGT);
       ov = double(ov>=0.5);
       ov(ov==0) = -1;
             
@@ -61,7 +71,9 @@ fp = (AllLabels(bb)==-1);
  % get npos
 npos = 0;
 for ii=1:size(gt_test.boxes,1)
-    npos = npos + size(gt_test.boxes{ii,cls},1);
+    for icls = 1:length(idx_gt)
+      npos = npos + size(gt_test.boxes{ii,idx_gt(icls)},1);
+    end
 end
     
 fp=cumsum(fp);
