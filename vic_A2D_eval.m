@@ -19,7 +19,7 @@ if(~isdeployed), dbstop if error; end
 
 addpath([pwd '/utils/'])
 % paths.test_detections: the path where the detections are stored 
-paths.test_detections = ['pwd' '/detections/'];
+paths.test_detections = [pwd '/detections/'];
 allcases = {'multitask', 'hierarchical', 'cartesian'};
 options.learning_case = allcases{learning_case_wanted}; 
 
