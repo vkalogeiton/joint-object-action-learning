@@ -37,7 +37,11 @@ for k=1:size(det_boxes,2)
    if isempty(currentGT)
       ov = -1*ones(size(currBoxes,1),1);
    else
-      ov = computeOverlapTableDouble(double(currBoxes(:,1:4)), currentGT);
+      try
+          ov = computeOverlapTableDouble(double(currBoxes(:, 1:4)), currentGT);
+      catch
+          ov = vic_computeOverlapTableDouble(double(currBoxes(:, 1:4)), currentGT(:,1:4));
+      end
       ov = double(ov>=0.5);
       ov(ov==0) = -1;
             
@@ -81,6 +85,28 @@ end
 res.ap = ap;
 res.precision = prec; 
 res.recall = rec; 
+
+end
+
+function [ov] = vic_computeOverlapTableDouble(boxes1, boxes2)
+
+ov = zeros(size(boxes1,1), size(boxes2,1));
+for ii=1:size(boxes1,1)
+    bb1=boxes1(ii,:);
+    for jj=1:size(boxes2,1)
+        bb2=boxes2(jj,:);
+        bi=[max(bb1(1),bb2(1)) ; max(bb1(2),bb2(2)) ; min(bb1(3),bb2(3)) ; min(bb1(4),bb2(4))];
+        iw=bi(3)-bi(1)+1;
+        ih=bi(4)-bi(2)+1;
+        if iw>0 & ih>0
+            % compute overlap as area of intersection / area of union
+            ua=(bb1(3)-bb1(1)+1)*(bb1(4)-bb1(2)+1)+...
+              (bb2(3)-bb2(1)+1)*(bb2(4)-bb2(2)+1)-...
+              iw*ih;
+            ov(ii,jj)=iw*ih/ua;
+       end
+    end
+end
 
 end
 
