@@ -57,7 +57,7 @@ switch options.learning_case
                 C = C + 1;
                 V = C; 
                 classname = [options.objects{cls_obj} '_' options.actions{cls_act}];
-                [res] = vic_map_objects_actions(gt_test, C, det_boxes, V);
+                [res] = vic_map_objects_actions(gt_test, C, det_obj_act_boxes, V);
                 printAP = res.ap * 100;
                 disp(['AP for ' classname ' is ' num2str(printAP) '%'])
                 FinalAP(cls_obj, cls_act) = printAP;
@@ -87,7 +87,7 @@ switch options.learning_case
                 if options.AllCombinations(C, 4) ~=0
                     V = V + 1; 
                     classname = [options.objects{cls_obj} '_' options.actions{cls_act}];
-                    [res] = vic_map_objects_actions(gt_test, C, det_boxes, V);
+                    [res] = vic_map_objects_actions(gt_test, C, det_obj_act_boxes, V);
                     printAP = res.ap * 100;
                     disp(['AP for ' classname ' is ' num2str(printAP) '%'])
                     FinalAP(cls_obj, cls_act) = printAP;
